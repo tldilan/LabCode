@@ -1,0 +1,38 @@
+setwd("/Users/tanyaleedilan/Google Drive/ARL13B protein interactors project/Protein interactome map/")  #set working directory 
+df <- read.csv("testcomparison.csv", header=TRUE) #load data name df keep the header
+head(d)
+
+library(dplyr) #load library
+
+d$cutBIOID<-NA #new column 
+d$cutBIOID<- substr(d$Proteins_BioID, 1, 6) #keep the first 6 characters from the Proteins_BioID column and place in new column 
+
+df2<-select(d,-c(8,9,10)) #delete column 8,9,10 from df
+df2$cutIP<-NA #new column 
+df2$cutIP<- substr(d$Proteins_IP, 1, 6) #keep the first 6 characters from the Proteins_IP column and place in new column 
+
+x<-df2$cutBIOID  #create variable called x of column cutBIOID
+y<-df2$cutIP  #create variable called x of column cutIP
+
+df2$Matches<-match(x,y)  #create new column called MActhes and match variable x and y 
+Matches<- subset(df2[8:10]) #grab columns 810 into a new df called Matches
+
+Matches[is.na(Matches)] <- 0  #set all of the Macthes that are NA to 0
+Matches$Matches[Matches$Matches > 0] <- 1  #set all of the Matches (any number above 0) to 1
+
+howmuchI<- Matches %>% 
+  group_by(Matches) %>%    # count how many 0's and 1's; Results : 292 proteins matched ,799 proteins did not match 
+  summarise(Count = n())
+
+#Make venn diagram with the above results (292 matched proteins go in the cross.area)
+grid.newpage()  
+draw.pairwise.venn(area1 = 574 + 292, area2 = 1091+292, cross.area = 292, 
+                   category = c("Bio-ID ARL13B", "ARL13B IP"),
+                   fill = c("light blue", "pink"))
+
+PositiveHits<- Matches %>%  #filter positive matches into new variable called positive hits 
+  filter(Matches > 0)
+
+Output<-select(PositiveHits,-c(2,3)) #remove the other two columns 
+
+write.csv(Output, "output.csv") #save positive hits as a .csv file
