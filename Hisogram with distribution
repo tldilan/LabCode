@@ -1,0 +1,13 @@
+setwd("/Users/tanyaleedilan/Google Drive/ARL13B protein interactors project/Protein interactome map/")
+d <- read.csv("vesicleTest.csv", header=TRUE)
+
+library(ggplot2)
+
+summary(d)  #this will tell you the mean max and min values for your paper
+p<- ggplot(d) +geom_histogram(aes(x = feretDiameter, y = ..density..),
+                          binwidth =15, fill = "palevioletred3", color = "black") + geom_density(aes(x = feretDiameter)) + geom_rug(aes(x = feretDiameter, y = 0), position = position_jitter(height = 0))
+
+p2<- p + labs(title = "Ectovesicle Diameters", x="Feret Diameter",  #add titles to the graph
+      y="Density")
+
+p2 #view graph
