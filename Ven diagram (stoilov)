@@ -1,0 +1,19 @@
+#install.packages('VennDiagram')
+#install.packages('dplyr')
+#install.packages('tydir')
+library(VennDiagram)
+library(dplyr)
+
+
+testisRaw<-read.csv(file='Google Drive/MSB-7167 WVU Ramamurthy 092818 Con Sheet Testes.csv')
+retinaRaw<-read.csv(file='Google Drive/MSB-6730 WVU Munezero 042718 (Autosaved) Con Sheet Retina.csv')
+head(testisRaw)
+colnames(testisRaw)<-colnames(retinaRaw)<-c('Description','idList','MW','spcWT','spcKO')
+testisRaw$tissue<-'testis'
+retinaRaw$tissue<-'retina'
+rawCounts<-rbind(testisRaw,retinaRaw)
+head(rawCounts)
+rawCounts$spID<-apply(rawCounts,1, function(x) unlist(strsplit(x['idList'],'\\|'))[[2]])
+
+?dplyr::gather
+gather(rawCounts,key=)
