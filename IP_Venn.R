@@ -7,7 +7,7 @@ library(dplyr)
 library(tidyr)
 
 # set you working folder
-setwd('~/Documents/projects/Abi/')
+setwd('~/Documents/projects/Tanya/')
 
 #read the data
 testisRaw<-read.csv(file='MSB-7167 WVU Ramamurthy 092818 Con Sheet Testes.csv', stringsAsFactors = F)
